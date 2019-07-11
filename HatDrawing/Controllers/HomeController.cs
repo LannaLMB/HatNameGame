@@ -26,5 +26,12 @@ namespace HatDrawing.Controllers
 
             return View();
         }
+
+        public ActionResult AddName(string name)
+        {
+            ViewBag.Name = name;
+
+            return View();
+        }
     }
 }
