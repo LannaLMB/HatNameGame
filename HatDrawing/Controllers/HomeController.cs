@@ -32,6 +32,9 @@ namespace HatDrawing.Controllers
             ViewBag.Name = name;
 
             return View();
+
+
+
         }
     }
 }
