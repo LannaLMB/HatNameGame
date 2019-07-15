@@ -2,11 +2,21 @@
     ViewBag.Title = "Home Page";
 }
 
-<h5>Please Enter a Name to Drop into the Hat and then Press [Enter]:  </h5>
+<h5 style="text-align:center">Please Enter a Name to Drop into the Hat and then Press [Enter]:  </h5>
 
-<form action="/Home/AddName">
+<!--  Add a Name  -->
+<form action="/Home/AddName" style="text-align:center">
 
-    Name:  <input type="text" name="name" />
+    Name:  <input type="text" placeholder=" Enter a Name" name="name" />
 
     <input type="hidden" />
+</form>
+
+<br />
+
+<!--  Draw a Name  -->
+<form action="/Home/NameDrawn" style="text-align:center">
+
+    <input type="submit" value="Draw a Name!" />
+
 </form>
