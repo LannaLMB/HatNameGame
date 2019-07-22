@@ -7,7 +7,16 @@
 <!--  Add a Name  -->
 <form action="/Home/AddName" style="text-align:center">
 
-    Name:  <input type="text" placeholder=" Enter a Name" name="name" />
+    <!-- we will require this field so that a user cannot enter a null or empty name -
+         using a regex to make sure a user doesn't attempt to submit whitespace as a name
+
+        RegEx Break Down:  https://zellwk.com/blog/check-empty-input-css/
+         .*  >>>  Any character
+         \S  >>>  Followed one non-whitespace character
+         .*  >>>  Followed by any character
+    -->
+
+    Name:  <input type="text" placeholder=" Enter a Name" name="name" required pattern=".*\S.*" />
 
     <input type="hidden" />
 </form>
