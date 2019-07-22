@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
+using System.Windows.Forms;
 
 namespace HatDrawing.Controllers
 {
@@ -12,18 +14,6 @@ namespace HatDrawing.Controllers
         // Home Page
         public ActionResult Index()
         {
-            // Declare ArrayList and Variables
-            ArrayList Names = new ArrayList();
-            string lc_name = name.ToLower();
-
-            // if the name has already been entered, we will tell the user that.
-            if (Names.Contains(lc_name))
-            {
-                return RedirectToAction("/Home/DuplicateName");
-            }
-
-            // if the name has not been entered, we will add the name to the list.
-            Names.Add(lc_name);
 
             return View();
         }
@@ -48,41 +38,52 @@ namespace HatDrawing.Controllers
 
 
         //  Return View for Name Added
-        public ActionResult AddName(string lc_name)
+        public ActionResult AddName(string name)
         {
-            ViewBag.Name = lc_name;
+            // Store the name and arraylist in a session variable
+            var names = HttpContext.Session["Names"] as ArrayList;
 
+            if (names == null) names = new ArrayList();
+   
+            string lc_name = name.ToLower();
+
+            // redirect to DuplicateName page if the name exists in the arraylist
+            if (names.Contains(lc_name))
+            {
+                // pass the session variable name for when we redirect the user to the duplicate name page
+                return RedirectToAction("DuplicateName", new { name = name });
+            }
+
+            names.Add(lc_name);
+
+            ViewBag.AddNameMessage = "The Name " + name + " was Added to the Hat!";
+
+
+            HttpContext.Session["Names"] = names;
+
+            return View();
+        }
+
+
+        // Return View for Duplicate Name
+        public ActionResult DuplicateName(string name)
+        {
+
+            ViewBag.DuplicateNameMessage = "The name " + name + " has already been entered into the hat.  Please try again.";
             return View();
         }
 
 
         // Draw a Random Name from the Hat
-        public ActionResult DrawName(ArrayList Names)
+        public ActionResult DrawName(ArrayList names)
         {
             Random random = new Random();
-            int rand_element = random.Next(Names.Count);
-            string name_drawn = Names[rand_element].ToString();
+            int rand_element = random.Next(names.Count);
+            string name_drawn = names[rand_element].ToString();
   
-            Names.RemoveAt(rand_element);
+            names.RemoveAt(rand_element);
 
-            ViewBag.NameDrawn = name_drawn;
-            return RedirectToAction("/Home/NameDrawn");
-        }
-
-
-        // Return View for Duplicate Name
-        public ActionResult DuplicateName(string lc_name)
-        {
-            ViewBag.DuplicateName = lc_name;
-
-            return View();
-        }
-
-
-        // Return View for Name Drawn
-        public ActionResult NameDrawn(string lc_name)
-        {
-            ViewBag.NameDrawn = lc_name;
+            ViewBag.NameDrawnMessage = "The Name Drawn was: " + name_drawn + "!";
 
             return View();
         }
